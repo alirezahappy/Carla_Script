@@ -1,2 +1,12 @@
 carla
 test
+MANIFEST.in
+README.md
+client_example_matrix.py
+client_example_original.py
+driving_benchmark_example.py
+manual_control.py
+point_cloud_example.py
+requirements.txt
+setup.py
+view_start_positions.py
