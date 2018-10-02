@@ -184,25 +184,7 @@ def run_carla_client(args):
                 camera_rs_30.set_position(1.30, 0.7, 1.50)
                 camera_rs_30.set_rotation(0, 30.0, 0)
                 settings.add_sensor(camera_rs_30)
-
-
-                '''
-                if args.lidar:
-                    lidar = Lidar('Lidar32')
-                    lidar.set_position(0, 0, 2.50)
-                    lidar.set_rotation(0, 0, 0)
-                    lidar.set(
-                        Channels=32,
-                        Range=50,
-                        PointsPerSecond=100000,
-                        RotationFrequency=10,
-                        UpperFovLimit=10,
-                        LowerFovLimit=-30)
-                    settings.add_sensor(lidar)
-                '''
-
             else:
-
                 # Alternatively, we can load these settings from a file.
                 with open(args.settings_filepath, 'r') as fp:
                     settings = fp.read()
@@ -427,8 +409,8 @@ def main():
         default=None,
         help='Path to a "CarlaSettings.ini" file')
     argparser.add_argument(
-        '-c', '--dataset-path',
-        default='/habtegebrialdata/Datasets/carla/',
+        '--dataset-path',
+        default='/habtegebrialdata/Datasets/carla',
         help='Path to the folder where extracted dataset should be stored ')
     args = argparser.parse_args()
 
@@ -437,7 +419,7 @@ def main():
 
     logging.info('listening to server %s:%s', args.host, args.port)
 
-    os.makedirs(, exist_ok=True)
+    os.makedirs(args.dataset_path, exist_ok=True)
     #args.dataset_path = '/data/khoshhal/Dataset/'
 
 
