@@ -1,10 +1,2 @@
 carla
 test
-./MANIFEST.*
-./client_example_original.*
-./driving_benchmark_example.*
-./manual_control.*
-./point_cloud_example.*
-./requirements.*
-./setup.*
-./view_start_positions.*
