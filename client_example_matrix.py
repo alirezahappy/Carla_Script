@@ -101,7 +101,6 @@ def run_carla_client(args):
                 camera_rs.set_position(1.30, 0.27, 1.50)
                 settings.add_sensor(camera_rs)
 
-
                 # LEFT 15 DEGREE RGB CAMERA
                 camera_l_15 = Camera('15_LeftCameraRGB', PostProcessing='SceneFinal')
                 camera_l_15.set_image_size(800, 600)
@@ -187,7 +186,6 @@ def run_carla_client(args):
                 settings.add_sensor(camera_rs_30)
 
 
-
                 '''
                 if args.lidar:
                     lidar = Lidar('Lidar32')
@@ -234,8 +232,6 @@ def run_carla_client(args):
 
             if not os.path.isdir("/data/khoshhal/Dataset/episode_{:0>4d}".format(episode)):
                 os.makedirs("/data/khoshhal/Dataset/episode_{:0>4d}".format(episode))
-
-
             # Iterate every frame in the episode.
             for frame in range(0, frames_per_episode):
 
@@ -273,7 +269,6 @@ def run_carla_client(args):
 
                         # Save Transform matrix of each camera to separated files
                         line = ""
-
                         filename = "{}episode_{:0>4d}/LeftCamera".format(args.root_path, episode) + ".txt"
                         with open(filename, 'a') as LeftCamera:
                             for x in np.asarray(camera_l_to_world_transform.matrix[:3, :]).reshape(-1):
@@ -282,7 +277,6 @@ def run_carla_client(args):
                             line += "\n"
                             LeftCamera.write(line)
                             line = ""
-
                         filename = "{}episode_{:0>4d}/RightCamera".format(args.root_path, episode) + ".txt"
                         with open(filename, 'a') as RightCamera:
                             for x in np.asarray(camera_r_to_world_transform.matrix[:3, :]).reshape(-1):
@@ -327,7 +321,6 @@ def run_carla_client(args):
                             line += "\n"
                             myfile.write(line)
                             line = ""
-
 
                 # We can access the encoded data of a given image as numpy
                 # array using its "data" property. For instance, to get the
