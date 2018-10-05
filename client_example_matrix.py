@@ -32,7 +32,7 @@ def run_carla_client(args):
     number_of_episodes = 15
     frames_per_episode = 1230
     #              [0 , 1 , 2 , 3 , 4  , 5  , 6  , 7  , 8  , 9  , 10, 11, 12, 13, 14]
-    vehicles_num = [140, 100, 120, 80, 90, 100, 80, 90, 110, 100, 80, 70, 70, 80, 100] 
+    vehicles_num = [140, 100, 120, 80, 90, 100, 80, 90, 110, 100, 80, 70, 70, 80, 100]
 
     # We assume the CARLA server is already waiting for a client to connect at
     # host:port. To create a connection we can use the `make_carla_client`
@@ -101,7 +101,6 @@ def run_carla_client(args):
                 camera_rs.set_position(1.30, 0.27, 1.50)
                 settings.add_sensor(camera_rs)
 
-                
                 # LEFT 15 DEGREE RGB CAMERA
                 camera_l_15 = Camera('15_LeftCameraRGB', PostProcessing='SceneFinal')
                 camera_l_15.set_image_size(800, 600)
@@ -185,26 +184,7 @@ def run_carla_client(args):
                 camera_rs_30.set_position(1.30, 0.7, 1.50)
                 camera_rs_30.set_rotation(0, 30.0, 0)
                 settings.add_sensor(camera_rs_30)
-                
-
-
-                '''
-                if args.lidar:
-                    lidar = Lidar('Lidar32')
-                    lidar.set_position(0, 0, 2.50)
-                    lidar.set_rotation(0, 0, 0)
-                    lidar.set(
-                        Channels=32,
-                        Range=50,
-                        PointsPerSecond=100000,
-                        RotationFrequency=10,
-                        UpperFovLimit=10,
-                        LowerFovLimit=-30)
-                    settings.add_sensor(lidar)
-                '''
-
             else:
-
                 # Alternatively, we can load these settings from a file.
                 with open(args.settings_filepath, 'r') as fp:
                     settings = fp.read()
@@ -232,10 +212,8 @@ def run_carla_client(args):
             camera_l_30_to_car_transform = camera_l_30.get_unreal_transform()
             camera_r_30_to_car_transform = camera_r_30.get_unreal_transform()
 
-            if not os.path.isdir("/data/khoshhal/Dataset/episode_{:0>4d}".format(episode)):
-                os.makedirs("/data/khoshhal/Dataset/episode_{:0>4d}".format(episode))
-            
-
+            if not os.path.isdir(args.dataset_path + "/episode_{:0>4d}".format(episode)):
+                os.makedirs(args.dataset_path + "/episode_{:0>4d}".format(episode))
             # Iterate every frame in the episode.
             for frame in range(0, frames_per_episode):
 
@@ -263,7 +241,7 @@ def run_carla_client(args):
                 camera_r_15_to_world_transform = world_transform * camera_r_15_to_car_transform
                 camera_l_30_to_world_transform = world_transform * camera_l_30_to_car_transform
                 camera_r_30_to_world_transform = world_transform * camera_r_30_to_car_transform
-
+                args.out_filename_format = dataset_path + '/episode_{:0>4d}/{:s}/{:0>6d}'
                 # Save the images to disk if requested.
                 if frame >= 30:
                     if args.save_images_to_disk:
@@ -273,8 +251,7 @@ def run_carla_client(args):
 
                         # Save Transform matrix of each camera to separated files
                         line = ""
-                        
-                        filename = "{}episode_{:0>4d}/LeftCamera".format(args.root_path, episode) + ".txt"
+                        filename = "{}/episode_{:0>4d}/LeftCamera".format(args.dataset_path, episode) + ".txt"
                         with open(filename, 'a') as LeftCamera:
                             for x in np.asarray(camera_l_to_world_transform.matrix[:3, :]).reshape(-1):
                                 line += "{:.8e} ".format(x)
@@ -282,8 +259,7 @@ def run_carla_client(args):
                             line += "\n"
                             LeftCamera.write(line)
                             line = ""
-                        
-                        filename = "{}episode_{:0>4d}/RightCamera".format(args.root_path, episode) + ".txt"
+                        filename = "{}/episode_{:0>4d}/RightCamera".format(args.dataset_path, episode) + ".txt"
                         with open(filename, 'a') as RightCamera:
                             for x in np.asarray(camera_r_to_world_transform.matrix[:3, :]).reshape(-1):
                                 line += "{:.8e} ".format(x)
@@ -292,7 +268,7 @@ def run_carla_client(args):
                             RightCamera.write(line)
                             line = ""
 
-                        filename = "{}episode_{:0>4d}/15_LeftCamera".format(args.root_path, episode) + ".txt"
+                        filename = "{}/episode_{:0>4d}/15_LeftCamera".format(args.dataset_path, episode) + ".txt"
                         with open(filename, 'a') as myfile:
                             for x in np.asarray(camera_l_15_to_world_transform.matrix[:3, :]).reshape(-1):
                                 line += "{:.8e} ".format(x)
@@ -301,7 +277,7 @@ def run_carla_client(args):
                             myfile.write(line)
                             line = ""
 
-                        filename = "{}episode_{:0>4d}/15_RightCamera".format(args.root_path, episode) + ".txt"
+                        filename = "{}/episode_{:0>4d}/15_RightCamera".format(args.dataset_path, episode) + ".txt"
                         with open(filename, 'a') as myfile:
                             for x in np.asarray(camera_r_15_to_world_transform.matrix[:3, :]).reshape(-1):
                                 line += "{:.8e} ".format(x)
@@ -310,7 +286,7 @@ def run_carla_client(args):
                             myfile.write(line)
                             line = ""
 
-                        filename = "{}episode_{:0>4d}/30_LeftCamera".format(args.root_path, episode) + ".txt"
+                        filename = "{}/episode_{:0>4d}/30_LeftCamera".format(args.dataset_path, episode) + ".txt"
                         with open(filename, 'a') as myfile:
                             for x in np.asarray(camera_l_30_to_world_transform.matrix[:3, :]).reshape(-1):
                                 line += "{:.8e} ".format(x)
@@ -319,7 +295,7 @@ def run_carla_client(args):
                             myfile.write(line)
                             line = ""
 
-                        filename = "{}episode_{:0>4d}/30_RightCamera".format(args.root_path, episode) + ".txt"
+                        filename = "{}/episode_{:0>4d}/30_RightCamera".format(args.dataset_path, episode) + ".txt"
                         with open(filename, 'a') as myfile:
                             for x in np.asarray(camera_r_30_to_world_transform.matrix[:3, :]).reshape(-1):
                                 line += "{:.8e} ".format(x)
@@ -327,7 +303,6 @@ def run_carla_client(args):
                             line += "\n"
                             myfile.write(line)
                             line = ""
-                    
 
                 # We can access the encoded data of a given image as numpy
                 # array using its "data" property. For instance, to get the
@@ -433,7 +408,10 @@ def main():
         dest='settings_filepath',
         default=None,
         help='Path to a "CarlaSettings.ini" file')
-
+    argparser.add_argument(
+        '--dataset-path',
+        default='/habtegebrialdata/Datasets/carla',
+        help='Path to the folder where extracted dataset should be stored ')
     args = argparser.parse_args()
 
     log_level = logging.DEBUG if args.debug else logging.INFO
@@ -441,8 +419,9 @@ def main():
 
     logging.info('listening to server %s:%s', args.host, args.port)
 
-    args.out_filename_format = '/data/khoshhal/Dataset/episode_{:0>4d}/{:s}/{:0>6d}'
-    args.root_path = '/data/khoshhal/Dataset/'
+    os.makedirs(args.dataset_path, exist_ok=True)
+    #args.dataset_path = '/data/khoshhal/Dataset/'
+
 
     while True:
         try:
