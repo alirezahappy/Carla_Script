@@ -1,4 +1,5 @@
 # Carla Dataset Recording
+Carla version 8.4.0
 
 # Command to run Carla Engine on Server
 ```
